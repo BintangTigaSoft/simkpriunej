@@ -5,6 +5,7 @@ namespace App\Controllers\Konfigurasi;
 use App\Controllers\BaseController;
 use Myth\Auth\Authorization\GroupModel;
 use Hermawan\DataTables\DataTable;
+use App\Helpers\ResponseFormatter;
 
 class RoleController extends BaseController
 {
@@ -34,7 +35,12 @@ class RoleController extends BaseController
     public function show($id)
     {
         $data = $this->groupModel->find($id);
-        return $this->response->setJSON($data ? ['status' => 'success', 'data' => $data] : ['status' => 'error', 'message' => 'Not found']);
+        
+        if ($data) {
+            return ResponseFormatter::success($data);
+        } else {
+            return ResponseFormatter::error(null, 'Data not found', 404);
+        }
     }
 
     public function create()
@@ -43,16 +49,16 @@ class RoleController extends BaseController
         
         // Manual Validation
         if (empty($roleName)) {
-            return $this->response->setJSON(['status' => 'error', 'errors' => ['role_name' => 'Role name is required']]);
+            return ResponseFormatter::error(['role_name' => 'Role name is required'], 'Validation Failed');
         }
         
         if (strlen($roleName) < 3) {
-            return $this->response->setJSON(['status' => 'error', 'errors' => ['role_name' => 'Role name must be at least 3 characters']]);
+            return ResponseFormatter::error(['role_name' => 'Role name must be at least 3 characters'], 'Validation Failed');
         }
         
         // Manual Unique Check
         if ($this->groupModel->where('name', $roleName)->first()) {
-            return $this->response->setJSON(['status' => 'error', 'errors' => ['role_name' => 'Role name already exists']]);
+            return ResponseFormatter::error(['role_name' => 'Role name already exists'], 'Validation Failed');
         }
 
         $this->groupModel->skipValidation(true)->insert([
@@ -60,7 +66,7 @@ class RoleController extends BaseController
             'description' => $this->request->getPost('description')
         ]);
 
-        return $this->response->setJSON(['status' => 'success', 'message' => 'Role created successfully']);
+        return ResponseFormatter::success(null, 'Role created successfully', 201);
     }
 
     public function update($id)
@@ -69,17 +75,17 @@ class RoleController extends BaseController
 
         // Manual Validation
         if (empty($roleName)) {
-            return $this->response->setJSON(['status' => 'error', 'errors' => ['role_name' => 'Role name is required']]);
+            return ResponseFormatter::error(['role_name' => 'Role name is required'], 'Validation Failed');
         }
         
         if (strlen($roleName) < 3) {
-            return $this->response->setJSON(['status' => 'error', 'errors' => ['role_name' => 'Role name must be at least 3 characters']]);
+            return ResponseFormatter::error(['role_name' => 'Role name must be at least 3 characters'], 'Validation Failed');
         }
         
         // Manual Unique Check (Exclude current ID)
         $existing = $this->groupModel->where('name', $roleName)->first();
         if ($existing && $existing->id != $id) {
-            return $this->response->setJSON(['status' => 'error', 'errors' => ['role_name' => 'Role name already exists']]);
+            return ResponseFormatter::error(['role_name' => 'Role name already exists'], 'Validation Failed');
         }
 
         $this->groupModel->skipValidation(true)->update($id, [
@@ -87,14 +93,14 @@ class RoleController extends BaseController
             'description' => $this->request->getPost('description')
         ]);
 
-        return $this->response->setJSON(['status' => 'success', 'message' => 'Role updated successfully']);
+        return ResponseFormatter::success(null, 'Role updated successfully');
     }
 
     public function delete($id)
     {
         if ($this->groupModel->delete($id)) {
-            return $this->response->setJSON(['status' => 'success', 'message' => 'Role deleted successfully']);
+            return ResponseFormatter::success(null, 'Role deleted successfully');
         }
-        return $this->response->setJSON(['status' => 'error', 'message' => 'Failed to delete role']);
+        return ResponseFormatter::error(null, 'Failed to delete role', 500);
     }
 }

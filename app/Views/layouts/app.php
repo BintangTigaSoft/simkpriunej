@@ -265,6 +265,7 @@
     <script src="<?= base_url('assets/vendors/js/sweetalert2.min.js') ?>"></script>
     <script src="<?= base_url('assets/vendors/js/dataTables.min.js') ?>"></script>
     <script src="<?= base_url('assets/vendors/js/dataTables.bs5.min.js') ?>"></script>
+    <script src="<?= base_url('assets/vendors/js/select2.min.js') ?>"></script>
     <script>
         $(document).ready(function() {
             $.ajaxSetup({
@@ -281,6 +282,18 @@
     <!--! BEGIN: Theme Customizer  !-->
     <script src="<?= base_url('assets/js/theme-customizer-init.min.js') ?>"></script>
     <!--! END: Theme Customizer !-->
+    
+    <!--! BEGIN: Custom Scripts !-->
+    <script src="<?= base_url('assets/js/rispin-crud.js') ?>"></script>
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                theme: 'bootstrap-5',
+                placeholder: 'Select an option'
+            });
+        });
+    </script>
+    <!--! END: Custom Scripts !-->
     
     <!--! BEGIN: Page Specific Scripts !-->
     <?= $this->renderSection('scripts') ?>
