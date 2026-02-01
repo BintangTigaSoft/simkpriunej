@@ -8,7 +8,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 
 // Auth Routes
-$routes->get('/login', 'LoginController::index');
-$routes->post('/login', 'LoginController::attempt');
-$routes->get('/logout', 'LoginController::logout');
+$routes->get('/login', 'AuthController::login');
+$routes->post('/login', 'AuthController::attemptLogin');
+$routes->get('/logout', 'AuthController::logout');
+$routes->get('/register', 'AuthController::register');
+$routes->post('/register', 'AuthController::attemptRegister');
 $routes->get('/dashboard', 'Home::dashboard', ['filter' => 'auth']); // Placeholder for dashboard

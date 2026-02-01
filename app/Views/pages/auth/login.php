@@ -13,7 +13,7 @@
                     <h4 class="fs-13 fw-bold mb-2">Login to your account</h4>
                     <p class="fs-12 fw-medium text-muted">Thank you for get back <strong>Nelel</strong> web applications, let's access our the best recommendation for you.</p>
 
-                    <form action="<?= url_to('LoginController::attempt') ?>" method="post" class="w-100 mt-4 pt-2">
+                    <form action="<?= url_to('AuthController::attemptLogin') ?>" method="post" class="w-100 mt-4 pt-2">
                         <?= csrf_field() ?>
                         <div class="mb-4">
                             <!-- Note: Changed type to text and name to nama to match DB column and Controller logic -->
@@ -21,7 +21,7 @@
                                 'type' => 'text', 
                                 'placeholder' => 'Username', 
                                 'value' => '', 
-                                'name' => 'nama', 
+                                'name' => 'login', 
                                 'extraattribute' => 'required autofocus'
                             ]) ?>
                         </div>
@@ -35,7 +35,24 @@
                             ]) ?>
                         </div>
                         
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <?php if ($config->allowRemembering): ?>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" <?php if (old('remember')) : ?> checked <?php endif ?>>
+                                    <label class="form-check-label" for="remember">
+                                        Remember Me
+                                    </label>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
                         <?= view('components/button', ['text' => 'Login']) ?>
+
+                        <?php if ($config->allowRegistration) : ?>
+                            <div class="mt-4 text-center">
+                                <p class="mb-0">Don't have an account? <a href="<?= url_to('register') ?>" class="fw-bold text-primary">Register</a></p>
+                            </div>
+                        <?php endif; ?>
                     </form>
                 </div>
             </div>
