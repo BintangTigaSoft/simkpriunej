@@ -8,22 +8,28 @@
     <meta name="description" content="" />
     <meta name="keyword" content="" />
     <meta name="author" content="flexilecode" />
+    <?= csrf_meta() ?>
     <!--! The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags !-->
     <!--! BEGIN: Apps Title-->
     <title>Duralux || Dashboard</title>
     <!--! END:  Apps Title-->
     <!--! BEGIN: Favicon-->
-    <link rel="shortcut icon" type="image/x-icon" href="assets/images/favicon.ico" />
+    <link rel="shortcut icon" type="image/x-icon" href="<?= base_url('assets/images/favicon.ico') ?>" />
     <!--! END: Favicon-->
     <!--! BEGIN: Bootstrap CSS-->
-    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/bootstrap.min.css') ?>" />
     <!--! END: Bootstrap CSS-->
     <!--! BEGIN: Vendors CSS-->
-    <link rel="stylesheet" type="text/css" href="assets/vendors/css/vendors.min.css" />
-    <link rel="stylesheet" type="text/css" href="assets/vendors/css/daterangepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/vendors/css/vendors.min.css') ?>" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/vendors/css/daterangepicker.min.css') ?>" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/vendors/css/sweetalert2.min.css') ?>" />
     <!--! END: Vendors CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/vendors/css/dataTables.bs5.min.css') ?>" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/vendors/css/select2.min.css') ?>" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/vendors/css/select2-theme.min.css') ?>" />
     <!--! BEGIN: Custom CSS-->
-    <link rel="stylesheet" type="text/css" href="assets/css/theme.min.css" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/theme.min.css') ?>" />
+    <link rel="stylesheet" type="text/css" href="<?= base_url('assets/css/custom.css') ?>" />
     <!--! END: Custom CSS-->
     <!--! HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries !-->
     <!--! WARNING: Respond.js doesn"t work if you view the page via file: !-->
@@ -31,6 +37,40 @@
 			<script src="https:oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
 			<script src="https:oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
+    <style>
+        /* Fix Select2 Bootstrap 5 Theme Clear Button - SVG Approach */
+        .select2-container--bootstrap-5 .select2-selection--single .select2-selection__clear {
+            background-color: transparent !important;
+            border: none !important;
+            width: 1.25rem !important; 
+            height: 1.25rem !important;
+            
+            /* Gunakan SVG X yang bersih & pasti muncul */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23a0a5b9'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 1rem !important;
+            
+            top: 50% !important;
+            right: 2.25rem !important;
+            transform: translateY(-50%) !important;
+            margin-right: 0 !important;
+            padding: 0 !important;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        /* Hilangkan pseudo-element sebelumnya (jika ada sisa) */
+        .select2-container--bootstrap-5 .select2-selection--single .select2-selection__clear::before {
+            display: none !important;
+        }
+
+        .select2-container--bootstrap-5 .select2-selection--single .select2-selection__clear:hover {
+            opacity: 1;
+            /* Merah saat hover */
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23dc3545'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") !important;
+        }
+    </style>
 </head>
 
 <body>
@@ -49,8 +89,7 @@
 
     <!--! ================================================================ !-->
     <!--! [End] Header !-->
-    <!--! ================================================================ !-->
-    <!--! ================================================================ !-->
+    <!--! =================================0=============================== !-->
     <!--! [Start] Main Content !-->
     <!--! ================================================================ !-->
     <main class="nxl-container">
@@ -252,19 +291,56 @@
     <!--! Footer Script !-->
     <!--! ================================================================ !-->
     <!--! BEGIN: Vendors JS !-->
-    <script src="assets/vendors/js/vendors.min.js"></script>
+    <script src="<?= base_url('assets/vendors/js/jquery.min.js') ?>"></script>
+    <script src="<?= base_url('assets/vendors/js/vendors.min.js') ?>"></script>
     <!-- vendors.min.js {always must need to be top} -->
-    <script src="assets/vendors/js/daterangepicker.min.js"></script>
-    <script src="assets/vendors/js/apexcharts.min.js"></script>
-    <script src="assets/vendors/js/circle-progress.min.js"></script>
+    <script src="<?= base_url('assets/vendors/js/daterangepicker.min.js') ?>"></script>
+    <script src="<?= base_url('assets/vendors/js/apexcharts.min.js') ?>"></script>
+    <script src="<?= base_url('assets/vendors/js/circle-progress.min.js') ?>"></script>
+    <script src="<?= base_url('assets/vendors/js/sweetalert2.min.js') ?>"></script>
+    <script src="<?= base_url('assets/vendors/js/dataTables.min.js') ?>"></script>
+    <script src="<?= base_url('assets/vendors/js/dataTables.bs5.min.js') ?>"></script>
+    <script src="<?= base_url('assets/vendors/js/select2.min.js') ?>"></script>
+    <script>
+        $(document).ready(function() {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="<?= csrf_token() ?>"]').attr('content')
+                }
+            });
+        });
+    </script>
     <!--! END: Vendors JS !-->
     <!--! BEGIN: Apps Init  !-->
-    <script src="assets/js/common-init.min.js"></script>
-    <script src="assets/js/dashboard-init.min.js"></script>
+    <script src="<?= base_url('assets/js/common-init.min.js') ?>"></script>
     <!--! END: Apps Init !-->
     <!--! BEGIN: Theme Customizer  !-->
-    <script src="assets/js/theme-customizer-init.min.js"></script>
+    <script src="<?= base_url('assets/js/theme-customizer-init.min.js') ?>"></script>
     <!--! END: Theme Customizer !-->
+    
+    <!--! BEGIN: Custom Scripts !-->
+    <script>
+        const RISPIN_CONFIG = {
+            csrfTokenName: '<?= csrf_token() ?>',
+            csrfCookieName: '<?= config('Security')->cookieName ?>'
+        };
+    </script>
+    <script src="<?= base_url('assets/js/rispin-crud.js') ?>"></script>
+    <script>
+        $(document).ready(function() {
+            if ($.fn.select2) {
+                $('.select2').select2({
+                    theme: 'bootstrap-5',
+                    placeholder: 'Select an option'
+                });
+            }
+        });
+    </script>
+    <!--! END: Custom Scripts !-->
+    
+    <!--! BEGIN: Page Specific Scripts !-->
+    <?= $this->renderSection('scripts') ?>
+    <!--! END: Page Specific Scripts !-->
 </body>
 
 </html>

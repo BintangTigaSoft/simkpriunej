@@ -124,3 +124,9 @@ _modules/*
 
 /results/
 /phpunit*.xml
+
+# Ignore CodeIgniter Session Files
+public/null/ci_session*
+
+# Ignore templates
+app/Views/templates/*
