@@ -1,4 +1,4 @@
-# Dokumentasi Proyek Pak Tony
+# Dokumentasi 
 
 Dokumentasi ini berisi panduan setup awal setelah clone repository dan alur kerja pengembangan (development workflow) yang disepakati.
 
