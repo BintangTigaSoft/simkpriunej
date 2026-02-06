@@ -9,10 +9,10 @@ Jika anda baru saja melakukan `clone` dari repository, lakukan langkah-langkah b
 ```bash
 # 1. Clone Repository (Belum ada project)
 # Ganti URL_REPOSITORY dengan link repository anda
-git clone https://github.com/natanetpro/rispin.git
+git clone https://github.com/BintangTigaSoft/simkpriunej.git
 
 # 2. Masuk ke folder project
-cd rispin
+cd simkpriunej
 
 # 3. Install dependencies (penting!)
 # Ini akan mengunduh semua library CodeIgniter 4 yang dibutuhkan
