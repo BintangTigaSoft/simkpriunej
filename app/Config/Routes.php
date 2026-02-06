@@ -5,35 +5,80 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
 
-// Auth Routes
-$routes->get('/login', 'AuthController::login');
-$routes->post('/login', 'AuthController::attemptLogin');
-$routes->get('/logout', 'AuthController::logout');
-$routes->get('/register', 'AuthController::register');
-$routes->post('/register', 'AuthController::attemptRegister');
-$routes->get('/dashboard', 'Home::dashboard', ['filter' => ['auth', 'permission:view_dashboard']]);
 
-// Konfigurasi Routes
-$routes->group('konfigurasi', ['filter' => 'auth'], function($routes) {
-    
-    // Role Manager
-    $routes->get('role', 'Konfigurasi\RoleController::index', ['filter' => 'permission:view_role']);
-    $routes->get('role/show/(:num)', 'Konfigurasi\RoleController::show/$1', ['filter' => 'permission:view_role']);
-    $routes->post('role/create', 'Konfigurasi\RoleController::create', ['filter' => 'permission:create_role']);
-    $routes->post('role/update/(:num)', 'Konfigurasi\RoleController::update/$1', ['filter' => 'permission:edit_role']);
-    $routes->match(['post', 'delete'], 'role/delete/(:num)', 'Konfigurasi\RoleController::delete/$1', ['filter' => 'permission:delete_role']);
-    
-    // Permission Assignment
-    $routes->get('permissions/(:num)', 'Konfigurasi\RoleController::permissions/$1', ['filter' => 'permission:edit_role']);
-    $routes->post('permissions/(:num)', 'Konfigurasi\RoleController::updatePermissions/$1', ['filter' => 'permission:edit_role']);
-    
-    // Menu Manager
-    $routes->get('menu', 'Konfigurasi\MenuController::index', ['filter' => 'permission:view_menu']);
-    $routes->get('menu/show/(:num)', 'Konfigurasi\MenuController::show/$1', ['filter' => 'permission:view_menu']);
-    $routes->post('menu/create', 'Konfigurasi\MenuController::create', ['filter' => 'permission:create_menu']);
-    $routes->post('menu/update/(:num)', 'Konfigurasi\MenuController::update/$1', ['filter' => 'permission:edit_menu']);
-    $routes->delete('menu/delete/(:num)', 'Konfigurasi\MenuController::delete/$1', ['filter' => 'permission:delete_menu']);
-    $routes->post('menu/saveOrder', 'Konfigurasi\MenuController::saveOrder', ['filter' => 'permission:edit_menu']);
+// Root URL -> Login
+$routes->get('/', 'Authentifikasi::index');
+
+// Auth routes
+$routes->get('auth', 'Authentifikasi::index');
+$routes->get('login', 'Authentifikasi::index');
+$routes->post('auth/process', 'Authentifikasi::process');
+
+$routes->get('logout', 'Authentifikasi::logout');
+
+
+
+// Toni CAS Process Route (dengan session CI4)
+//$routes->get('auth/process_cas', 'Auth::process_cas');
+
+// Toni Auth Routes
+/*
+$routes->get('/', 'Auth::index');
+$routes->get('auth', 'Auth::index');
+$routes->get('auth/sso', 'Auth::sso');
+$routes->get('auth/form', 'Auth::form');
+$routes->post('auth/process', 'Auth::process');
+$routes->get('auth/logout', 'Auth::logout');
+*/
+// Toni Dashboard
+$routes->get('dashboard', 'Dashboard::index');
+
+
+// Toni users
+$routes->group('users', function ($routes) {
+    $routes->get('/', 'Users::index');
+    $routes->get('detail/(:segment)', 'Users::detail/$1');
+    $routes->get('create', 'Users::create');
+    $routes->post('store', 'Users::store');
+    $routes->get('edit/(:segment)', 'Users::edit/$1');
+    $routes->post('update/(:segment)', 'Users::update/$1');
+
+    // PERBAIKAN DISINI: Pastikan nama method sama
+    $routes->get('deactivate/(:segment)', 'Users::deactivate/$1');
+    $routes->get('activate/(:segment)', 'Users::activate/$1');
+
+    $routes->get('reset-password/(:segment)', 'Users::reset_password/$1');
+    $routes->get('export', 'Users::export');
+
+    $routes->get('get-edit-data/(:segment)', 'Users::get_edit_data/$1');
+    $routes->post('ajax-update', 'Users::ajax_update');
+
+    $routes->get('get-form-data', 'Users::get_form_data');
+    $routes->post('ajax-store', 'Users::ajax_store');
+
+
 });
+
+
+// Toni kendaraan
+
+$routes->group('kendaraan', static function ($routes) {
+    $routes->get('/', 'Kendaraan::index');
+    $routes->get('load-more', 'Kendaraan::load_more');
+    $routes->get('detail/(:num)', 'Kendaraan::detail/$1');
+    $routes->get('create', 'Kendaraan::create');
+    $routes->post('store', 'Kendaraan::store');
+    $routes->get('get-form-data', 'Kendaraan::get_form_data');
+    $routes->post('ajax-store', 'Kendaraan::ajax_store');
+    $routes->get('get-edit-data/(:num)', 'Kendaraan::get_edit_data/$1');
+    $routes->post('ajax-update', 'Kendaraan::ajax_update');
+    $routes->post('delete/(:num)', 'Kendaraan::delete/$1');
+    $routes->post('update-status/(:num)', 'Kendaraan::update_status/$1');
+    $routes->get('export', 'Kendaraan::export');
+});
+
+// Toni kendaraan
+
+$routes->get('kendaraan/image/(:any)', 'Kendaraan::image/$1');
+$routes->get('kendaraan/image', 'Kendaraan::image');

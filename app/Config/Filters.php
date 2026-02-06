@@ -57,6 +57,7 @@ class Filters extends BaseFilters
         'before' => [
             'forcehttps', // Force Global Secure Requests
             'pagecache',  // Web Page Caching
+
         ],
         'after' => [
             'pagecache',   // Web Page Caching
@@ -76,9 +77,13 @@ class Filters extends BaseFilters
      */
     public array $globals = [
         'before' => [
-            // 'honeypot',
-            // 'csrf',
-            // 'invalidchars',
+            'csrf' => ['except' => [
+            'auth/process',      // Login manual (POST)
+            'auth/authensso*',   // CAS callback
+            'auth/process_cas',  // CAS processing
+            'auth/sso',          // SSO direct
+            'auth/logout',       // Logout (jika POST)
+        ]]
         ],
         'after' => [
             // 'honeypot',

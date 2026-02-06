@@ -2,21 +2,19 @@
 
 namespace App\Controllers;
 
-class Home extends BaseController
+use CodeIgniter\Controller;
+
+class Home extends Controller
 {
     public function index()
     {
-        // Check if user is logged in
-        if (service('authentication')->check()) {
-            return redirect()->to('/dashboard');
+        try {
+            $db = \Config\Database::connect();
+            $row = $db->query('SELECT now()')->getRow();
+
+            return '✅ DB CONNECTED: ' . $row->now;
+        } catch (\Throwable $e) {
+            return '❌ DB ERROR: ' . $e->getMessage();
         }
-
-        // If not logged in, redirect to login
-        return redirect()->to('/login');
-    }
-
-    public function dashboard(): string
-    {
-        return view('pages/dashboard/index');
     }
 }
